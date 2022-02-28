@@ -3,21 +3,34 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import restaurants from './restaurants.js'
 
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
   return (
   <View style={styles.layout}>
-    <Text style={styles.title}>Home</Text>
+
+  </View>
+  )
+};
+
+const RandomizeScreen = (props) => {
+  return (
+  <View style={styles.layout}>
+    
   </View>
   )
 };
 
 const IndexScreen = () => {
   return (
-  <View style={styles.layout}>
-    <Text style={styles.title}>Where to Eat</Text>
-  </View>
+    <View style={styles.layout}>
+      {restaurants.map(restaurant => {
+        return (
+          <Text style={styles.title}>{restaurant.name}</Text>
+        )
+      })}
+    </View>
   )
 };
 
@@ -52,6 +65,17 @@ export const AppNavigator = () => {
           <MaterialCommunityIcons name="silverware-fork-knife" color={color} size={size} />
         ),
       }} />
+
+      <Tab.Screen 
+      name="Randomize" 
+      component={RandomizeScreen}
+      options={{
+        tabBarLabel: 'Randomize',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="pasta" color={color} size={size} />
+        ),
+      }}/>
+
     <Tab.Screen 
       name="Add"
       component={AddScreen}
