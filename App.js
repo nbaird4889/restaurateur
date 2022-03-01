@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking, Pressable, TextInput, Button} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -40,9 +40,9 @@ const HomeScreen = (props) => {
 
 const RandomizeScreen = (props) => {
   const [restaurant, setRestaurant] = useState('Hampton + Hudson')
-  const [town, setTown] = useState('Inman Park')
-  const [type, setType] = useState('American')
-  const [price, setPrice] = useState('$$')
+  const [town, setTown] = useState('Part of Town: Inman Park')
+  const [type, setType] = useState('Type: American')
+  const [price, setPrice] = useState('Price Point: $$')
   const [website, setWebsite] = useState('https://www.hamptonandhudson.com/')
 
   const getPlace = (event) => {
@@ -69,12 +69,12 @@ const RandomizeScreen = (props) => {
               onPress={() => {
               Linking.openURL(website);
               }}>Website</Text></Text>
-        <Pressable
+        <TouchableOpacity
           style={styles.button}
           onPress={getPlace}
         >
           <Text style={styles.text}>Randomize</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -134,7 +134,32 @@ const AddScreen = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     restaurantArr.push({name, part_of_town, type, price, website});
-    setName({name: ""})
+    setName("");
+    setPartOfTown("");
+    setType("");
+    setPrice("");
+    setWebsite("")
+};
+
+const checkTextInput = () => {
+  if (!name.trim()) {
+    alert('Please Enter Restaurant Name');
+    return;
+  }
+
+  if (!part_of_town.trim()) {
+    alert('Please Enter Part of Town');
+    return;
+  }
+
+  if (!type.trim()) {
+    alert('Please Enter Type of Restaurant');
+    return;
+  }
+  if (!price.trim()) {
+    alert('Please Enter Price Point');
+    return;
+  }
 };
 
   return (
@@ -144,34 +169,42 @@ const AddScreen = () => {
       style={styles.input} 
       onChangeText = {(value) => setName(value)}
       placeholder='Hampton + Hudson'
+      value={name}
     />
     <Text style={styles.label}>Part of Town:</Text>
     <TextInput
       style={styles.input} 
       onChangeText = {(value) => setPartOfTown(value)}
       placeholder='Inman Park'
+      value={part_of_town}
     />
     <Text style={styles.label}>Type:</Text>
     <TextInput
       style={styles.input} 
       onChangeText = {(value) => setType(value)}
       placeholder='American'
+      value={type}
     />
     <Text style={styles.label}>Price Point:</Text>
     <TextInput
       style={styles.input} 
       onChangeText = {(value) => setPrice(value)}
       placeholder='Scale of $ - $$$$'
+      value={price}
+      maxLength={4}
     />
     <Text style={styles.label}>Website (URL):</Text>
     <TextInput
       style={styles.input} 
       onChangeText = {(value) => setWebsite(value)}
       placeholder='https://www.hamptonandhudson.com/'
+      value={website}
+      autoCapitalize='none'
     />
-    <Pressable style={styles.submit} onPress={handleSubmit}>
+    <TouchableOpacity style={styles.submit} onPress={handleSubmit, checkTextInput}>
       <Text style={styles.text}>Add Restaurant</Text>
-    </Pressable>
+    </TouchableOpacity>
+
   </View>
   )
 };
@@ -257,7 +290,7 @@ const styles = StyleSheet.create({
   },
 
   restaurantCard: {
-    backgroundColor: '#e6c619', 
+    backgroundColor: '#bda800', 
     padding: 20,
   },
 
