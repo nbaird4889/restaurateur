@@ -1,21 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import restaurants from './restaurants.js'
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { useState } from 'react';
 
 const image = require('./assets/images/home-background.jpg')
+const imageTwo = require('./assets/images/randomize.jpg')
 
 const MyTheme = {
   dark: true,
   colors: {
-    primary: '#bcbcbc',
+    primary: '#0C4767',
     background: 'white',
-    card: '#10564F',
-    text: 'white',
-    border: '#10564F',
+    card: '#E0DFD5',
+    text: 'black',
+    border: '#E0DFD5',
     notification: 'rgb(255, 69, 58)',
   },
 };
@@ -35,11 +37,47 @@ const HomeScreen = (props) => {
   )
 };
 
+
 const RandomizeScreen = (props) => {
+  const [restaurant, setRestaurant] = useState(null)
+  const [town, setTown] = useState(null)
+  const [type, setType] = useState(null)
+  const [price, setPrice] = useState(null)
+  const [website, setWebsite] = useState(null)
+
+  const getPlace = (event) => {
+    event.preventDefault();
+    let restaurant = restaurants[Math.floor((Math.random() * restaurants.length))];
+    setRestaurant(restaurant.name);
+    setTown("Part of Town: " + restaurant.part_of_town);
+    setType("Type: " + restaurant.type);
+    setPrice("Price Point: " + restaurant.price)
+    setWebsite(restaurant.website)
+  };
+
   return (
-  <View style={styles.container}>
-    
-  </View>
+    <View style={styles.container}>
+      <ImageBackground source={imageTwo} style={{ width: '100%', height: '100%'}}>
+      <View style={styles.imagecontainer}>
+        <Text style={styles.name}>{restaurant}</Text>
+        <Text style={styles.details}>{town}</Text>
+        <Text style={styles.details}>{type}</Text>
+        <Text style={styles.details}>{price}</Text>
+        <Text style={styles.details}>
+          <Text
+              style={styles.hyperlink}
+              onPress={() => {
+              Linking.openURL(website);
+              }}>Website</Text></Text>
+        <Pressable
+          style={styles.button}
+          onPress={getPlace}
+        >
+          <Text style={styles.text}>Randomize</Text>
+          </Pressable>
+        </View>
+      </ImageBackground>
+    </View>
   )
 };
 
@@ -52,12 +90,12 @@ const IndexScreen = () => {
           return (
             <View style={styles.restaurantCard}>
               <Text style={styles.name}>{restaurant.name}</Text>
-              <Text style={styles.details}>{restaurant.part_of_town}</Text>
-              <Text style={styles.details}>{restaurant.type}</Text>
-              <Text style={styles.details}>{restaurant.price}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Part of Town: </Text>{restaurant.part_of_town}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Type: </Text> {restaurant.type}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Price Point: </Text> {restaurant.price}</Text>
               <Text style={styles.details}>
                 <Text
-                  style={styles.hyperlinkStyle}
+                  style={styles.hyperlink}
                   onPress={() => {
                   Linking.openURL(restaurant.website);
               }}>Website</Text></Text>
@@ -67,12 +105,12 @@ const IndexScreen = () => {
           return (
             <View style={styles.restaurantCardOdd}>
               <Text style={styles.name}>{restaurant.name}</Text>
-              <Text style={styles.details}>{restaurant.part_of_town}</Text>
-              <Text style={styles.details}>{restaurant.type}</Text>
-              <Text style={styles.details}>{restaurant.price}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Part of Town: </Text>{restaurant.part_of_town}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Type: </Text> {restaurant.type}</Text>
+              <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Price Point: </Text> {restaurant.price}</Text>
               <Text style={styles.details}>
                 <Text
-                  style={styles.hyperlinkStyle}
+                  style={styles.hyperlink}
                   onPress={() => {
                   Linking.openURL(restaurant.website);
               }}>Website</Text></Text>
@@ -101,7 +139,7 @@ export const AppNavigator = () => {
       name="Home" 
       component={HomeScreen}
       options={{
-        tabBarInactiveTintColor: 'white',
+        tabBarInactiveTintColor: '#8896AB',
         tabBarLabel: 'Home',
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -111,7 +149,7 @@ export const AppNavigator = () => {
       name="Restaurants"
       component={IndexScreen}
       options={{
-        tabBarInactiveTintColor: 'white',
+        tabBarInactiveTintColor: '#8896AB',
         tabBarLabel: 'Where to Eat',
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="silverware-fork-knife" color={color} size={size} />
@@ -122,7 +160,7 @@ export const AppNavigator = () => {
       name="Randomize" 
       component={RandomizeScreen}
       options={{
-        tabBarInactiveTintColor: 'white',
+        tabBarInactiveTintColor: '#8896AB',
         tabBarLabel: 'Randomize',
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="pasta" color={color} size={size} />
@@ -133,7 +171,7 @@ export const AppNavigator = () => {
       name="Add"
       component={AddScreen}
       options={{
-        tabBarInactiveTintColor: 'white',
+        tabBarInactiveTintColor: '#8896AB',
         tabBarLabel: 'Add Restaurant',
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="plus" color={color} size={size} />
@@ -154,7 +192,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E0DFD5',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -166,18 +204,43 @@ const styles = StyleSheet.create({
   },
 
   restaurantCard: {
-    backgroundColor: '#43AA8B', 
+    backgroundColor: '#e6c619', 
     padding: 20,
   },
 
   restaurantCardOdd: {
-    backgroundColor: '#FF6F59', 
+    backgroundColor: '#0B6E4F', 
     padding: 20,
+  },
+
+  name: {
+    textAlign: 'center',
+    color: 'white', 
+    fontWeight: 'bold',
+    fontSize: 26,
+    paddingBottom: 10
+  },
+
+  details: {
+    textAlign: 'center',
+    color: 'white', 
+    fontSize: 18,
+    paddingBottom: 8
+  },
+
+  hyperlink: {
+    textDecorationLine: 'underline',
+    fontWeight: 'bold', 
   },
 
   image: {
     flex: 1,
     resizeMode: 'cover',
+  },
+
+  imageTwo: {
+    flex: 1, 
+    resizeMode: 'cover'
   },
 
   imagecontainer: {
@@ -199,5 +262,18 @@ const styles = StyleSheet.create({
     fontSize: 26,
     textAlign: 'center',
     margin: 20,
+  },
+
+  button: {
+    backgroundColor: '#0B6E4F',
+    padding: 10,
+    margin: 25
+  },
+
+  text: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   }
+
 });
