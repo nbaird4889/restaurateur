@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, SafeAreaView, ScrollView, Linking, Pressable, TextInput, Button} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -39,11 +39,11 @@ const HomeScreen = (props) => {
 
 
 const RandomizeScreen = (props) => {
-  const [restaurant, setRestaurant] = useState(null)
-  const [town, setTown] = useState(null)
-  const [type, setType] = useState(null)
-  const [price, setPrice] = useState(null)
-  const [website, setWebsite] = useState(null)
+  const [restaurant, setRestaurant] = useState('Hampton + Hudson')
+  const [town, setTown] = useState('Inman Park')
+  const [type, setType] = useState('American')
+  const [price, setPrice] = useState('$$')
+  const [website, setWebsite] = useState('https://www.hamptonandhudson.com/')
 
   const getPlace = (event) => {
     event.preventDefault();
@@ -88,7 +88,7 @@ const IndexScreen = () => {
       {restaurants.map((restaurant, index) => {
         {if(index % 2 === 0 )
           return (
-            <View style={styles.restaurantCard}>
+            <View key={index} style={styles.restaurantCard}>
               <Text style={styles.name}>{restaurant.name}</Text>
               <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Part of Town: </Text>{restaurant.part_of_town}</Text>
               <Text style={styles.details}><Text style={{fontWeight: 'bold'}}>Type: </Text> {restaurant.type}</Text>
@@ -123,9 +123,55 @@ const IndexScreen = () => {
 };
 
 const AddScreen = () => {
+  const [name, setName] = useState('')
+  const [part_of_town, setPartOfTown] = useState('')
+  const [type, setType] = useState('')
+  const [price, setPrice] = useState('')
+  const [website, setWebsite] = useState('')
+
+  const restaurantArr = restaurants
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    restaurantArr.push({name, part_of_town, type, price, website});
+    setName({name: ""})
+};
+
   return (
-  <View style={styles.container}>
-    <Text style={styles.title}>Add a Restaurant</Text>
+  <View style={styles.form}>
+    <Text style={styles.label}>Restaurant Name:</Text>
+    <TextInput
+      style={styles.input} 
+      onChangeText = {(value) => setName(value)}
+      placeholder='Hampton + Hudson'
+    />
+    <Text style={styles.label}>Part of Town:</Text>
+    <TextInput
+      style={styles.input} 
+      onChangeText = {(value) => setPartOfTown(value)}
+      placeholder='Inman Park'
+    />
+    <Text style={styles.label}>Type:</Text>
+    <TextInput
+      style={styles.input} 
+      onChangeText = {(value) => setType(value)}
+      placeholder='American'
+    />
+    <Text style={styles.label}>Price Point:</Text>
+    <TextInput
+      style={styles.input} 
+      onChangeText = {(value) => setPrice(value)}
+      placeholder='Scale of $ - $$$$'
+    />
+    <Text style={styles.label}>Website (URL):</Text>
+    <TextInput
+      style={styles.input} 
+      onChangeText = {(value) => setWebsite(value)}
+      placeholder='https://www.hamptonandhudson.com/'
+    />
+    <Pressable style={styles.submit} onPress={handleSubmit}>
+      <Text style={styles.text}>Add Restaurant</Text>
+    </Pressable>
   </View>
   )
 };
@@ -190,6 +236,13 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  form: {
+    flex: 1,
+    backgroundColor: '#0B6E4F',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   container: {
     flex: 1,
     backgroundColor: '#E0DFD5',
@@ -224,7 +277,7 @@ const styles = StyleSheet.create({
   details: {
     textAlign: 'center',
     color: 'white', 
-    fontSize: 18,
+    fontSize: 20,
     paddingBottom: 8
   },
 
@@ -274,6 +327,26 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+
+  input: {
+    padding: 10, 
+    backgroundColor: '#f5f5f5',
+    width: '75%', 
+    marginBottom: 20
+  }, 
+
+  label: {
+    color: 'white',
+    fontWeight: 'bold', 
+    fontSize: 22, 
+    paddingBottom: 10
+  },
+
+  submit: {
+    backgroundColor: '#AA1155',
+    padding: 10,
+    margin: 10
   }
 
 });
