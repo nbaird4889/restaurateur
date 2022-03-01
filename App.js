@@ -201,7 +201,7 @@ const checkTextInput = () => {
       value={website}
       autoCapitalize='none'
     />
-    <TouchableOpacity style={styles.submit} onPress={handleSubmit, checkTextInput}>
+    <TouchableOpacity style={styles.submit} onPress={handleSubmit} onPressOut={checkTextInput}>
       <Text style={styles.text}>Add Restaurant</Text>
     </TouchableOpacity>
 
